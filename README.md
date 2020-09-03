@@ -1,4 +1,4 @@
-# ProgrammingApitutdeTest
+# ProgrammingAptitudeTest
 Testing the following:
 
 -Time management
