@@ -8,12 +8,12 @@ you will be given a score. Please use SCRAP PAPER and a CALCULATOR for working
 out answers. Please note that this is quite a demanding test.
 
 Beau Seate
-8/31/20
-
+9/2/20
 '''
 import threading
 import time
 import sys
+import os
 
 
 #==============Main program
@@ -28,6 +28,9 @@ def main():
     exSA2 = ""
     exC2 = "A"
     
+    exSA3 = ""
+    exC3 = "F"
+    
     
     #==========Program start
     instructions()
@@ -35,20 +38,13 @@ def main():
     timerThread.start()
     exSA1 = exQ1()
     exSA2 = exQ2()
+    exSA3 = exQ3()
     
-    
-    
-    
-    
-
-#===================Import OS to clear screen to declutter
+   
+#===================Import OS to clear screen to declutter window
 def clearScreen():
-    import os
-    
     #=================Checks for OS to issue correct clear screen command
     os.system("cls" if os.name == 'nt' else 'clear')
-
-
 
 #=========================Prints instructions before test is taken
 def instructions():
@@ -62,10 +58,17 @@ def instructions():
         input("\nPress enter to start practice problem 1:")
         clearScreen()#Clear screen method
 
+#=========================Display results of test and what they mean
+def displayResults(userScore):
+    print()
+    
 
-
-
-
+def displayTable():
+    from tabulate import tabulate
+    null = ""
+    l = [["#1", 9, 7, 8, 4, null, null], ["#2", 8, 2, 3, 7, null, null], ["#3", 11, 1, 5, 6, null, null], ["#4",13, 9, 6, 3, null, null]]
+    table = tabulate(l, headers=[null,"A","B","C","D","E","F"], tablefmt="orgtbl")
+    print(table)
 
 
 #====================Timer that counts down from 25 mins
@@ -80,58 +83,91 @@ def timer():
         time.sleep(1)
         myTime -= 1
     print("\nOut of time!")
-    #return timeLeft, myTime
-
-    
-    
 
 
+#======================Input validation void method
+def checkAnswer(exA):
+    result = any(ele in exA for ele in ANSWER_CHOICES)#Result gives boolean check for "True" return
+    while(bool(result) == False or 1 < len(exA)):#If the result return is "False" or length of string > 1
+        exA = input(str("Please enter a valid letter choice: "))#Input validation
+        result = any(ele in exA for ele in ANSWER_CHOICES)#Result gives boolean check for "True" return
+        
+        
+        
 #=======================Example question 1
 def exQ1():
-    exA1 = ""#Variable to store user input
+    '''
+    :rtype: exA
+    '''
+    exA = ""#Variable to store user input
     if myTime > 0:#While there is time left
         print("\n" + timeLeft)#Print time left for user
     
     print("\nEXAMPLE 1 (This does not count to your overall score)\n\n1) Maggie thought of a number, added 7, multiplied by 3,",end=" ")
     print("took away 5, and divided by 4 to give an answer of 7.\n\nWhat was her starting number?")
     print("\nA. 1\nB. 2\nC. 3\nD. 4\nE. 5\nF. 6")#Answer option menu
-    exA1 = input(str("\n\n\nYour answer: "))#Ask user for letter answer
-    result = any(ele in exA1 for ele in ANSWER_CHOICES)#Result gives boolean check for "True" return
-    while(bool(result) == False):#If the result return is "False"
-        exA1 = input(str("Please enter a valid letter choice: "))#Input validation
-        result = any(ele in exA1 for ele in ANSWER_CHOICES)#Result gives boolean check for "True" return
+    exA = input(str("\n\n\nYour answer: "))#Ask user for letter answer
+    checkAnswer(exA)
     while myTime > 0:#While there is time left
         print(timeLeft + "\r", end="")#Print time left for user
         time.sleep(1)#Wait a second for user to check time
-        if(exA1 != ""):#If answer has an input
+        if(exA != ""):#If answer has an input
             clearScreen()#clearScreen method erases screen
             break#break loop
     
-    return exA1#Return user answer
+    return exA#Return user answer
 
 #====================Example question 2
 def exQ2():
-    exA2 = ""
+    '''
+    :rtype: exA
+    '''
+    exA = ""
     if myTime > 0:#While there is time left
         print("\n" + timeLeft)#Print time left for user
         
-    print("\nEXAMPLE 2 (This does not count to your overall score) (LOOK AT IMAGE DISPLAYED)\n\nIn these questions, the", end=" ")
+    print("\nEXAMPLE 2 (This does not count to your overall score) (Look at the table)\n\nIn these questions, the", end=" ")
     print("coordinates (e.g. A1) of a square refer to the number in the square, e.g. A1 = 9")
+    print("\n\n")
+    displayTable()
     print("\n\n2) What is B1 + C2?")
     print("\nA. 10\nB. 11\nC. 12\nD. 13\nE. 14\nF. None of the Above")
-    exA2 = input(str("\n\n\nYour answer: "))
-    result = any(ele in exA2 for ele in ANSWER_CHOICES)
-    while(bool(result) == False):
-        exA2 = input(str("Please enter a valid letter choice: "))
-        result = any(ele in exA2 for ele in ANSWER_CHOICES)
+    exA = input(str("\n\n\nYour answer: "))
+    checkAnswer(exA)
     while myTime > 0:
         print(timeLeft + "\r", end="")
         time.sleep(1)
-        if(exA2 != ""):
+        if(exA != ""):
             clearScreen()
             break    
     
-    return exA2
+    return exA
+
+#=====================Example question 3
+def exQ3():
+    '''
+    :rtype: exA
+    '''
+    exA = ""
+    if myTime > 0:#While there is time left
+        print("\n" + timeLeft)#Print time left for user
+        
+    print("\nFINAL EXAMPLE: THE TIMED TEST WILL BEGIN AFTER THIS QUESTION.\n\nIn these questions, the", end=" ")
+    print("coordinates (e.g. A1) of a square refer to the number in the square, e.g. A1 = 9")
+    print("\n\n")
+    displayTable()
+    print("\n\n3) Multiply A1 by B2. Put the result in E1. Now divide E1 by D4.\n\nWhat is the answer?")
+    print("\nA. 1\nB. 2\nC. 3\nD. 4\nE. 5\nF. None of the Above")
+    exA = input(str("\n\n\nYour answer: "))
+    checkAnswer(exA)
+    while myTime > 0:
+        print(timeLeft + "\r", end="")
+        time.sleep(1)
+        if(exA != ""):
+            clearScreen()
+            break    
+    
+    return exA
 
 
 
